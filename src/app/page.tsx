@@ -9,7 +9,14 @@ import { kompetansemaal, kjerneelementer, udirLinks, note } from "@/lib/curricul
 import { load, save } from "@/lib/storage";
 
 type Tab = "fagprove" | "kompetanse" | "info";
-type KundeType = "cafe" | "hotell" | "museum";
+type KundeType =
+  | "cafe"
+  | "hotell"
+  | "museum"
+  | "skole"
+  | "gym"
+  | "dyreklinikk";
+
 
 type Shared = { kandidatNavn: string; dato: string };
 
@@ -85,11 +92,21 @@ const defaultCustomerName: Record<KundeType, string> = {
   cafe: "Lys & Brød",
   hotell: "Hotel Nordlys",
   museum: "Nordlys Museum",
+  skole: "Bjørnholt videregående skole",
+  gym: "Nordlys Treningssenter",
+  dyreklinikk: "Oslo Dyreklinikk",
 };
 
+
 function kundeLabel(t: KundeType) {
-  return t === "cafe" ? "Café" : t === "hotell" ? "Hotell" : "Museum";
+  if (t === "cafe") return "Café";
+  if (t === "hotell") return "Hotell";
+  if (t === "museum") return "Museum";
+  if (t === "skole") return "Skole";
+  if (t === "gym") return "Treningssenter";
+  return "Dyreklinikk";
 }
+
 
 function shouldAutoUpdateCustomerName(currentName: string) {
   const trimmed = (currentName || "").trim();
@@ -330,8 +347,12 @@ function FagproveTab({ fag, setFag }: { fag: FagproveAnswers; setFag: (v: Fagpro
           <Field label="Kundetype">
             <select className="select" value={fag.kundeType} onChange={(e) => setFag({ ...fag, kundeType: e.target.value as any })}>
               <option value="cafe">Café</option>
-              <option value="hotell">Hotell</option>
-              <option value="museum">Museum</option>
+<option value="hotell">Hotell</option>
+<option value="museum">Museum</option>
+<option value="skole">Skole</option>
+<option value="gym">Treningssenter</option>
+<option value="dyreklinikk">Dyreklinikk</option>
+
             </select>
           </Field>
           <Field label="Kundenavn (kan redigeres)">
