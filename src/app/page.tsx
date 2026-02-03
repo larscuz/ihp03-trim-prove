@@ -3,20 +3,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TabButton } from "@/components/TabButton";
 import { Field } from "@/components/Field";
-import { Question } from "@/components/Question";
 import { exportNodeToPdf } from "@/lib/pdf";
 import { kompetansemaal, kjerneelementer, udirLinks, note } from "@/lib/curriculum";
 import { load, save } from "@/lib/storage";
+import { QuestionWithAI } from "@/components/QuestionWithAI";
 
 type Tab = "fagprove" | "kompetanse" | "info";
-type KundeType =
-  | "cafe"
-  | "hotell"
-  | "museum"
-  | "skole"
-  | "gym"
-  | "dyreklinikk";
-
+type KundeType = "cafe" | "hotell" | "museum" | "skole" | "gym" | "dyreklinikk";
 
 type Shared = { kandidatNavn: string; dato: string };
 
@@ -59,6 +52,43 @@ type FagproveAnswers = {
   yrkesfellesskap: string;
 
   dokumentasjon: string;
+
+  // AI-bruk per del
+  ai_bakgrunn: string;
+  ai_mal: string;
+  ai_malgruppe: string;
+  ai_innsikt: string;
+
+  ai_budskap: string;
+  ai_tone: string;
+  ai_ideutvikling: string;
+  ai_pitch: string;
+
+  ai_kanalvalg: string;
+  ai_leveranseHoved: string;
+  ai_leveransePlattform1: string;
+  ai_leveransePlattform2: string;
+
+  ai_produksjonsplan: string;
+  ai_budsjett: string;
+  ai_opptak: string;
+  ai_utstyr: string;
+
+  ai_lysKomposisjon: string;
+  ai_etterarbeidEksport: string;
+
+  ai_algoritmer: string;
+  ai_publiseringsstrategi: string;
+
+  ai_etikkLov: string;
+  ai_universell: string;
+
+  ai_teamRolle: string;
+  ai_evaluering: string;
+  ai_samfunn: string;
+  ai_yrkesfellesskap: string;
+
+  ai_dokumentasjon: string;
 };
 
 type KompetanseAnswers = {
@@ -74,6 +104,17 @@ type KompetanseAnswers = {
   enkelPlan: string;
   enkelPublisering: string;
   enkelEtikk: string;
+
+  // AI-bruk per del
+  ai_design: string;
+  ai_teknologi: string;
+  ai_fortelling: string;
+
+  ai_formatvalg: string;
+  ai_lysvalg: string;
+  ai_enkelPlan: string;
+  ai_enkelPublisering: string;
+  ai_enkelEtikk: string;
 };
 
 const KEY_SHARED = "ihp03_trim_shared_v2";
@@ -97,7 +138,6 @@ const defaultCustomerName: Record<KundeType, string> = {
   dyreklinikk: "Oslo Dyreklinikk",
 };
 
-
 function kundeLabel(t: KundeType) {
   if (t === "cafe") return "Café";
   if (t === "hotell") return "Hotell";
@@ -106,7 +146,6 @@ function kundeLabel(t: KundeType) {
   if (t === "gym") return "Treningssenter";
   return "Dyreklinikk";
 }
-
 
 function shouldAutoUpdateCustomerName(currentName: string) {
   const trimmed = (currentName || "").trim();
@@ -162,6 +201,42 @@ export default function Page() {
     yrkesfellesskap: "",
 
     dokumentasjon: "",
+
+    ai_bakgrunn: "",
+    ai_mal: "",
+    ai_malgruppe: "",
+    ai_innsikt: "",
+
+    ai_budskap: "",
+    ai_tone: "",
+    ai_ideutvikling: "",
+    ai_pitch: "",
+
+    ai_kanalvalg: "",
+    ai_leveranseHoved: "",
+    ai_leveransePlattform1: "",
+    ai_leveransePlattform2: "",
+
+    ai_produksjonsplan: "",
+    ai_budsjett: "",
+    ai_opptak: "",
+    ai_utstyr: "",
+
+    ai_lysKomposisjon: "",
+    ai_etterarbeidEksport: "",
+
+    ai_algoritmer: "",
+    ai_publiseringsstrategi: "",
+
+    ai_etikkLov: "",
+    ai_universell: "",
+
+    ai_teamRolle: "",
+    ai_evaluering: "",
+    ai_samfunn: "",
+    ai_yrkesfellesskap: "",
+
+    ai_dokumentasjon: "",
   });
 
   const [komp, setKomp] = useState<KompetanseAnswers>({
@@ -177,6 +252,16 @@ export default function Page() {
     enkelPlan: "",
     enkelPublisering: "",
     enkelEtikk: "",
+
+    ai_design: "",
+    ai_teknologi: "",
+    ai_fortelling: "",
+
+    ai_formatvalg: "",
+    ai_lysvalg: "",
+    ai_enkelPlan: "",
+    ai_enkelPublisering: "",
+    ai_enkelEtikk: "",
   });
 
   useEffect(() => {
@@ -231,6 +316,118 @@ export default function Page() {
     }
   }
 
+  function resetFagprove() {
+    if (!confirm("Vil du nullstille alle svar i fagprøven?")) return;
+
+    setFag({
+      ...fag,
+      kundeType: "cafe",
+      kundenavn: defaultCustomerName.cafe,
+
+      bakgrunn: "",
+      mal: "",
+      malgruppe: "",
+      innsikt: "",
+
+      budskap: "",
+      tone: "",
+      ideutvikling: "",
+      pitch: "",
+
+      kanalvalg: "",
+      leveranseHoved: "",
+      leveransePlattform1: "",
+      leveransePlattform2: "",
+
+      produksjonsplan: "",
+      budsjett: "",
+      opptak: "",
+      utstyr: "",
+
+      lysKomposisjon: "",
+      etterarbeidEksport: "",
+
+      algoritmer: "",
+      publiseringsstrategi: "",
+
+      etikkLov: "",
+      universell: "",
+
+      teamRolle: "",
+      evaluering: "",
+      samfunn: "",
+      yrkesfellesskap: "",
+
+      dokumentasjon: "",
+
+      ai_bakgrunn: "",
+      ai_mal: "",
+      ai_malgruppe: "",
+      ai_innsikt: "",
+
+      ai_budskap: "",
+      ai_tone: "",
+      ai_ideutvikling: "",
+      ai_pitch: "",
+
+      ai_kanalvalg: "",
+      ai_leveranseHoved: "",
+      ai_leveransePlattform1: "",
+      ai_leveransePlattform2: "",
+
+      ai_produksjonsplan: "",
+      ai_budsjett: "",
+      ai_opptak: "",
+      ai_utstyr: "",
+
+      ai_lysKomposisjon: "",
+      ai_etterarbeidEksport: "",
+
+      ai_algoritmer: "",
+      ai_publiseringsstrategi: "",
+
+      ai_etikkLov: "",
+      ai_universell: "",
+
+      ai_teamRolle: "",
+      ai_evaluering: "",
+      ai_samfunn: "",
+      ai_yrkesfellesskap: "",
+
+      ai_dokumentasjon: "",
+    });
+  }
+
+  function resetKompetanse() {
+    if (!confirm("Vil du nullstille alle svar i kompetansebeviset?")) return;
+
+    setKomp({
+      ...komp,
+      kundeType: "cafe",
+      kundenavn: defaultCustomerName.cafe,
+
+      design: "",
+      teknologi: "",
+      fortelling: "",
+
+      formatvalg: "",
+      lysvalg: "",
+      enkelPlan: "",
+      enkelPublisering: "",
+      enkelEtikk: "",
+
+      ai_design: "",
+      ai_teknologi: "",
+      ai_fortelling: "",
+
+      ai_formatvalg: "",
+      ai_lysvalg: "",
+      ai_enkelPlan: "",
+      ai_enkelPublisering: "",
+      ai_enkelEtikk: "",
+    });
+  }
+
   const activeKundeType = tab === "kompetanse" ? komp.kundeType : fag.kundeType;
 
   return (
@@ -238,12 +435,12 @@ export default function Page() {
       <div className="header">
         <div className="hgroup">
           <h1>Prøve i innholdsproduksjon (IHP03-01)</h1>
-<p>
-  Fagprøve eller kompetansebevis – kreativ brief for kommersiell kunde i sosiale medier.
-  Du arbeider i reklamebyrået <b>Trim AS</b> og skal planlegge, beskrive og dokumentere
-  en innholdsproduksjon for en kunde (café, hotell eller museum).
-</p>
-
+          <p>
+            Fagprøve eller kompetansebevis – kreativ brief for kommersiell kunde i sosiale medier. Du
+            arbeider i reklamebyrået <b>Trim AS</b> og skal planlegge, beskrive og dokumentere en
+            innholdsproduksjon for en kunde (café, hotell, museum, skole, treningssenter eller
+            dyreklinikk).
+          </p>
         </div>
         <span className="badge">v0.2 • bokmål</span>
       </div>
@@ -267,6 +464,18 @@ export default function Page() {
           <button className="btn primary" onClick={downloadPdf} disabled={pdfBusy}>
             {pdfBusy ? "Lager PDF…" : "Last ned PDF (aktiv fane)"}
           </button>
+
+          {tab === "fagprove" && (
+            <button className="btn" onClick={resetFagprove}>
+              Nullstill fagprøve
+            </button>
+          )}
+
+          {tab === "kompetanse" && (
+            <button className="btn" onClick={resetKompetanse}>
+              Nullstill kompetansebevis
+            </button>
+          )}
         </div>
 
         <div className="content">
@@ -297,10 +506,9 @@ export default function Page() {
             <div className="section">
               <h3>Oppdrag</h3>
               <p>
-                Du jobber i reklamebyrået <b>Trim AS</b>. Kunden er en{" "}
-                <b>{kundeLabel(activeKundeType)}</b>-aktør som trenger bedre synlighet i sosiale medier.
-                Du skal levere <b>1 hovedproduksjon</b>, <b>2 plattformversjoner</b>,{" "}
-                <b>publiseringsstrategi</b> og <b>dokumentasjon</b>.
+                Du jobber i reklamebyrået <b>Trim AS</b>. Kunden er en <b>{kundeLabel(activeKundeType)}</b>
+                -aktør som trenger bedre synlighet i sosiale medier. Du skal levere <b>1 hovedproduksjon</b>,{" "}
+                <b>2 plattformversjoner</b>, <b>publiseringsstrategi</b> og <b>dokumentasjon</b>.
               </p>
               <p className="small">{note}</p>
             </div>
@@ -326,7 +534,13 @@ export default function Page() {
             <b>Trim AS</b> • Kunde: <b>{kundeLabel(activeKundeType)}</b>
           </p>
 
-          {tab === "fagprove" ? <FagprovePrint fag={fag} /> : tab === "kompetanse" ? <KompetansePrint komp={komp} /> : <InfoPrint />}
+          {tab === "fagprove" ? (
+            <FagprovePrint fag={fag} />
+          ) : tab === "kompetanse" ? (
+            <KompetansePrint komp={komp} />
+          ) : (
+            <InfoPrint />
+          )}
 
           <hr className="sep" />
           <p className="small">
@@ -338,6 +552,25 @@ export default function Page() {
   );
 }
 
+function KundeSelect({
+  value,
+  onChange,
+}: {
+  value: KundeType;
+  onChange: (v: KundeType) => void;
+}) {
+  return (
+    <select className="select" value={value} onChange={(e) => onChange(e.target.value as KundeType)}>
+      <option value="cafe">Café</option>
+      <option value="hotell">Hotell</option>
+      <option value="museum">Museum</option>
+      <option value="skole">Skole</option>
+      <option value="gym">Treningssenter</option>
+      <option value="dyreklinikk">Dyreklinikk</option>
+    </select>
+  );
+}
+
 function FagproveTab({ fag, setFag }: { fag: FagproveAnswers; setFag: (v: FagproveAnswers) => void }) {
   return (
     <div className="grid">
@@ -345,18 +578,15 @@ function FagproveTab({ fag, setFag }: { fag: FagproveAnswers; setFag: (v: Fagpro
         <h3>1. Kunde og rammer</h3>
         <div className="kv two">
           <Field label="Kundetype">
-            <select className="select" value={fag.kundeType} onChange={(e) => setFag({ ...fag, kundeType: e.target.value as any })}>
-              <option value="cafe">Café</option>
-<option value="hotell">Hotell</option>
-<option value="museum">Museum</option>
-<option value="skole">Skole</option>
-<option value="gym">Treningssenter</option>
-<option value="dyreklinikk">Dyreklinikk</option>
-
-            </select>
+            <KundeSelect value={fag.kundeType} onChange={(v) => setFag({ ...fag, kundeType: v })} />
           </Field>
           <Field label="Kundenavn (kan redigeres)">
-            <input className="input" value={fag.kundenavn} onChange={(e) => setFag({ ...fag, kundenavn: e.target.value })} placeholder="Skriv kundenavn" />
+            <input
+              className="input"
+              value={fag.kundenavn}
+              onChange={(e) => setFag({ ...fag, kundenavn: e.target.value })}
+              placeholder="Skriv kundenavn"
+            />
           </Field>
         </div>
       </div>
@@ -364,125 +594,260 @@ function FagproveTab({ fag, setFag }: { fag: FagproveAnswers; setFag: (v: Fagpro
       <div className="section">
         <h3>2. Kreativ brief (låste spørsmål)</h3>
 
-        <Question title="Bakgrunn / problem" text="Beskriv situasjonen: hva er problemet eller behovet kunden har i sosiale medier? Svar konkret.">
-          <textarea className="textarea" value={fag.bakgrunn} onChange={(e) => setFag({ ...fag, bakgrunn: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Bakgrunn / problem"
+          text="Beskriv situasjonen: hva er problemet eller behovet kunden har i sosiale medier? Svar konkret."
+          answer={fag.bakgrunn}
+          setAnswer={(v) => setFag({ ...fag, bakgrunn: v })}
+          ai={fag.ai_bakgrunn}
+          setAi={(v) => setFag({ ...fag, ai_bakgrunn: v })}
+        />
 
-        <Question title="Mål og ønsket effekt" text="Hva skal kampanjen oppnå (målbare mål/KPI-er der det passer)?">
-          <textarea className="textarea" value={fag.mal} onChange={(e) => setFag({ ...fag, mal: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Mål og ønsket effekt"
+          text="Hva skal kampanjen oppnå (målbare mål/KPI-er der det passer)?"
+          answer={fag.mal}
+          setAnswer={(v) => setFag({ ...fag, mal: v })}
+          ai={fag.ai_mal}
+          setAi={(v) => setFag({ ...fag, ai_mal: v })}
+        />
 
-        <Question title="Målgruppe" text="Hvem er målgruppen(e), og hva kjennetegner dem (atferd, behov, barrierer)?">
-          <textarea className="textarea" value={fag.malgruppe} onChange={(e) => setFag({ ...fag, malgruppe: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Målgruppe"
+          text="Hvem er målgruppen(e), og hva kjennetegner dem (atferd, behov, barrierer)?"
+          answer={fag.malgruppe}
+          setAnswer={(v) => setFag({ ...fag, malgruppe: v })}
+          ai={fag.ai_malgruppe}
+          setAi={(v) => setFag({ ...fag, ai_malgruppe: v })}
+        />
 
-        <Question title="Brukerinnsikt" text="Hvilke metoder vil du bruke for å skaffe brukerinnsikt, og hvordan vil innsikten styre valgene dine?">
-          <textarea className="textarea" value={fag.innsikt} onChange={(e) => setFag({ ...fag, innsikt: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Brukerinnsikt"
+          text="Hvilke metoder vil du bruke for å skaffe brukerinnsikt, og hvordan vil innsikten styre valgene dine?"
+          answer={fag.innsikt}
+          setAnswer={(v) => setFag({ ...fag, innsikt: v })}
+          ai={fag.ai_innsikt}
+          setAi={(v) => setFag({ ...fag, ai_innsikt: v })}
+        />
 
-        <Question title="Budskap" text="Formuler hovedbudskapet i 1–2 setninger. Hva skal publikum sitte igjen med?">
-          <textarea className="textarea" value={fag.budskap} onChange={(e) => setFag({ ...fag, budskap: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Budskap"
+          text="Formuler hovedbudskapet i 1–2 setninger. Hva skal publikum sitte igjen med?"
+          answer={fag.budskap}
+          setAnswer={(v) => setFag({ ...fag, budskap: v })}
+          ai={fag.ai_budskap}
+          setAi={(v) => setFag({ ...fag, ai_budskap: v })}
+        />
 
-        <Question title="Tone / profil" text="Beskriv tone of voice og visuell retning (lys, seriøs, corporate).">
-          <textarea className="textarea" value={fag.tone} onChange={(e) => setFag({ ...fag, tone: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Tone / profil"
+          text="Beskriv tone of voice og visuell retning (lys, seriøs, corporate)."
+          answer={fag.tone}
+          setAnswer={(v) => setFag({ ...fag, tone: v })}
+          ai={fag.ai_tone}
+          setAi={(v) => setFag({ ...fag, ai_tone: v })}
+        />
 
-        <Question title="Idéutvikling" text="Beskriv hvilke metoder du bruker for idéutvikling (f.eks. moodboard, skisser, prototyper, testing).">
-          <textarea className="textarea" value={fag.ideutvikling} onChange={(e) => setFag({ ...fag, ideutvikling: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Idéutvikling"
+          text="Beskriv hvilke metoder du bruker for idéutvikling (f.eks. moodboard, skisser, prototyper, testing)."
+          answer={fag.ideutvikling}
+          setAnswer={(v) => setFag({ ...fag, ideutvikling: v })}
+          ai={fag.ai_ideutvikling}
+          setAi={(v) => setFag({ ...fag, ai_ideutvikling: v })}
+        />
 
-        <Question title="Pitch" text="Skriv en pitch (maks 10 setninger): konsept, format, hvorfor det passer målgruppen, forventet effekt.">
-          <textarea className="textarea" value={fag.pitch} onChange={(e) => setFag({ ...fag, pitch: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <hr className="sep" />
-
-        <Question title="Kanalvalg" text="Hvilke plattformer velger du og hvorfor? (Instagram/TikTok/YouTube Shorts/LinkedIn m.fl.)">
-          <textarea className="textarea" value={fag.kanalvalg} onChange={(e) => setFag({ ...fag, kanalvalg: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <Question title="Leveranse 1: Hovedproduksjon" text="Beskriv hovedproduksjonen (60–90 sek): innhold, dramaturgi, CTA og hvordan den løser målet.">
-          <textarea className="textarea" value={fag.leveranseHoved} onChange={(e) => setFag({ ...fag, leveranseHoved: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <Question title="Leveranse 2: Plattformversjon 1" text="Beskriv en 9:16 versjon (15–30 sek) for Reels/Shorts/TikTok: hook, teksting, tempo.">
-          <textarea className="textarea" value={fag.leveransePlattform1} onChange={(e) => setFag({ ...fag, leveransePlattform1: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <Question title="Leveranse 3: Plattformversjon 2" text="Beskriv en ekstra kort variant (6–12 sek) eller 1:1/9:16: hva er budskapet i første sekund?">
-          <textarea className="textarea" value={fag.leveransePlattform2} onChange={(e) => setFag({ ...fag, leveransePlattform2: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <hr className="sep" />
-
-        <Question title="Produksjonsplan" text="Lag en gjennomførbar plan (preprod → opptak → post → publisering) med roller og sjekklister.">
-          <textarea className="textarea" value={fag.produksjonsplan} onChange={(e) => setFag({ ...fag, produksjonsplan: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <Question title="Budsjett / ressursbehov" text="Kartlegg ressursbehov og lag et realistisk mini-budsjett (tid, utstyr, musikk/stock, reise).">
-          <textarea className="textarea" value={fag.budsjett} onChange={(e) => setFag({ ...fag, budsjett: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <Question title="Opptak" text="Hvordan gjennomfører du opptak (foto/film/lyd) tilpasset rammer? (B-roll, intervju, lyd, sikkerhet)">
-          <textarea className="textarea" value={fag.opptak} onChange={(e) => setFag({ ...fag, opptak: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <Question title="Utstyr og programvare" text="Hvilket utstyr og hvilken programvare velger du, og hvorfor? (kamera/lys/lyd/redigering)">
-          <textarea className="textarea" value={fag.utstyr} onChange={(e) => setFag({ ...fag, utstyr: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <hr className="sep" />
-
-        <Question title="Lys, komposisjon og visuelle virkemidler" text="Forklar lysoppsett, komposisjon og visuell stil. Hvordan støtter det budskap og merkevare?">
-          <textarea className="textarea" value={fag.lysKomposisjon} onChange={(e) => setFag({ ...fag, lysKomposisjon: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
-
-        <Question title="Etterarbeid og eksport" text="Beskriv etterarbeid (klipp, lyd, grafikk/teksting, farge). Hvilke formater/filtyper leverer du?">
-          <textarea className="textarea" value={fag.etterarbeidEksport} onChange={(e) => setFag({ ...fag, etterarbeidEksport: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Pitch"
+          text="Skriv en pitch (maks 10 setninger): konsept, format, hvorfor det passer målgruppen, forventet effekt."
+          answer={fag.pitch}
+          setAnswer={(v) => setFag({ ...fag, pitch: v })}
+          ai={fag.ai_pitch}
+          setAi={(v) => setFag({ ...fag, ai_pitch: v })}
+        />
 
         <hr className="sep" />
 
-        <Question title="Algoritmer og personalisering" text="Hvordan påvirker algoritmer distribusjon – og hvilke grep tar du (hook, retention, metadata, test)?">
-          <textarea className="textarea" value={fag.algoritmer} onChange={(e) => setFag({ ...fag, algoritmer: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Kanalvalg"
+          text="Hvilke plattformer velger du og hvorfor? (Instagram/TikTok/YouTube Shorts/LinkedIn m.fl.)"
+          answer={fag.kanalvalg}
+          setAnswer={(v) => setFag({ ...fag, kanalvalg: v })}
+          ai={fag.ai_kanalvalg}
+          setAi={(v) => setFag({ ...fag, ai_kanalvalg: v })}
+        />
 
-        <Question title="Publiseringsstrategi" text="Planlegg publisering: tidspunkt, frekvens, A/B-testing, community, KPI-er og oppfølging.">
-          <textarea className="textarea" value={fag.publiseringsstrategi} onChange={(e) => setFag({ ...fag, publiseringsstrategi: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Leveranse 1: Hovedproduksjon"
+          text="Beskriv hovedproduksjonen (60–90 sek): innhold, dramaturgi, CTA og hvordan den løser målet."
+          answer={fag.leveranseHoved}
+          setAnswer={(v) => setFag({ ...fag, leveranseHoved: v })}
+          ai={fag.ai_leveranseHoved}
+          setAi={(v) => setFag({ ...fag, ai_leveranseHoved: v })}
+        />
+
+        <QuestionWithAI
+          title="Leveranse 2: Plattformversjon 1"
+          text="Beskriv en 9:16 versjon (15–30 sek) for Reels/Shorts/TikTok: hook, teksting, tempo."
+          answer={fag.leveransePlattform1}
+          setAnswer={(v) => setFag({ ...fag, leveransePlattform1: v })}
+          ai={fag.ai_leveransePlattform1}
+          setAi={(v) => setFag({ ...fag, ai_leveransePlattform1: v })}
+        />
+
+        <QuestionWithAI
+          title="Leveranse 3: Plattformversjon 2"
+          text="Beskriv en ekstra kort variant (6–12 sek) eller 1:1/9:16: hva er budskapet i første sekund?"
+          answer={fag.leveransePlattform2}
+          setAnswer={(v) => setFag({ ...fag, leveransePlattform2: v })}
+          ai={fag.ai_leveransePlattform2}
+          setAi={(v) => setFag({ ...fag, ai_leveransePlattform2: v })}
+        />
 
         <hr className="sep" />
 
-        <Question title="Etikk, lovverk og opphavsrett" text="Hvordan sikrer du samtykke/personvern, opphavsrett, reklame-merking, og oppbevaring/arkiv?">
-          <textarea className="textarea" value={fag.etikkLov} onChange={(e) => setFag({ ...fag, etikkLov: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Produksjonsplan"
+          text="Lag en gjennomførbar plan (preprod → opptak → post → publisering) med roller og sjekklister."
+          answer={fag.produksjonsplan}
+          setAnswer={(v) => setFag({ ...fag, produksjonsplan: v })}
+          ai={fag.ai_produksjonsplan}
+          setAi={(v) => setFag({ ...fag, ai_produksjonsplan: v })}
+        />
 
-        <Question title="Universell utforming" text="Hvordan sikrer du universell utforming i ferdig produkt (teksting, kontrast, lesbarhet, tempo)?">
-          <textarea className="textarea" value={fag.universell} onChange={(e) => setFag({ ...fag, universell: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Budsjett / ressursbehov"
+          text="Kartlegg ressursbehov og lag et realistisk mini-budsjett (tid, utstyr, musikk/stock, reise)."
+          answer={fag.budsjett}
+          setAnswer={(v) => setFag({ ...fag, budsjett: v })}
+          ai={fag.ai_budsjett}
+          setAi={(v) => setFag({ ...fag, ai_budsjett: v })}
+        />
+
+        <QuestionWithAI
+          title="Opptak"
+          text="Hvordan gjennomfører du opptak (foto/film/lyd) tilpasset rammer? (B-roll, intervju, lyd, sikkerhet)"
+          answer={fag.opptak}
+          setAnswer={(v) => setFag({ ...fag, opptak: v })}
+          ai={fag.ai_opptak}
+          setAi={(v) => setFag({ ...fag, ai_opptak: v })}
+        />
+
+        <QuestionWithAI
+          title="Utstyr og programvare"
+          text="Hvilket utstyr og hvilken programvare velger du, og hvorfor? (kamera/lys/lyd/redigering)"
+          answer={fag.utstyr}
+          setAnswer={(v) => setFag({ ...fag, utstyr: v })}
+          ai={fag.ai_utstyr}
+          setAi={(v) => setFag({ ...fag, ai_utstyr: v })}
+        />
 
         <hr className="sep" />
 
-        <Question title="Rolle i team / virksomhet" text="Beskriv din rolle, samarbeid og kvalitetssikring i Trim AS (kommunikasjon, ansvar, endringer).">
-          <textarea className="textarea" value={fag.teamRolle} onChange={(e) => setFag({ ...fag, teamRolle: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Lys, komposisjon og visuelle virkemidler"
+          text="Forklar lysoppsett, komposisjon og visuell stil. Hvordan støtter det budskap og merkevare?"
+          answer={fag.lysKomposisjon}
+          setAnswer={(v) => setFag({ ...fag, lysKomposisjon: v })}
+          ai={fag.ai_lysKomposisjon}
+          setAi={(v) => setFag({ ...fag, ai_lysKomposisjon: v })}
+        />
 
-        <Question title="Evaluering" text="Hvordan evaluerer du resultat og læring? Hvilke data bruker du, og hva forbedrer du i runde 2?">
-          <textarea className="textarea" value={fag.evaluering} onChange={(e) => setFag({ ...fag, evaluering: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Etterarbeid og eksport"
+          text="Beskriv etterarbeid (klipp, lyd, grafikk/teksting, farge). Hvilke formater/filtyper leverer du?"
+          answer={fag.etterarbeidEksport}
+          setAnswer={(v) => setFag({ ...fag, etterarbeidEksport: v })}
+          ai={fag.ai_etterarbeidEksport}
+          setAi={(v) => setFag({ ...fag, ai_etterarbeidEksport: v })}
+        />
 
-        <Question title="Samfunnsdebatt og demokrati" text="Reflekter kort: Hvordan kan innholdsproduksjoner påvirke samfunnsdebatt og demokrati?">
-          <textarea className="textarea" value={fag.samfunn} onChange={(e) => setFag({ ...fag, samfunn: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <hr className="sep" />
 
-        <Question title="Likeverdig og inkluderende yrkesfellesskap" text="Gjør rede for krav/forventninger, og reflekter over plikter og rettigheter i lærebedrift.">
-          <textarea className="textarea" value={fag.yrkesfellesskap} onChange={(e) => setFag({ ...fag, yrkesfellesskap: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Algoritmer og personalisering"
+          text="Hvordan påvirker algoritmer distribusjon – og hvilke grep tar du (hook, retention, metadata, test)?"
+          answer={fag.algoritmer}
+          setAnswer={(v) => setFag({ ...fag, algoritmer: v })}
+          ai={fag.ai_algoritmer}
+          setAi={(v) => setFag({ ...fag, ai_algoritmer: v })}
+        />
 
-        <Question title="Dokumentasjon" text="Hvordan dokumenterer du prosess, filstruktur, kilder, versjoner og endelig leveranse til kunden?">
-          <textarea className="textarea" value={fag.dokumentasjon} onChange={(e) => setFag({ ...fag, dokumentasjon: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Publiseringsstrategi"
+          text="Planlegg publisering: tidspunkt, frekvens, A/B-testing, community, KPI-er og oppfølging."
+          answer={fag.publiseringsstrategi}
+          setAnswer={(v) => setFag({ ...fag, publiseringsstrategi: v })}
+          ai={fag.ai_publiseringsstrategi}
+          setAi={(v) => setFag({ ...fag, ai_publiseringsstrategi: v })}
+        />
+
+        <hr className="sep" />
+
+        <QuestionWithAI
+          title="Etikk, lovverk og opphavsrett"
+          text="Hvordan sikrer du samtykke/personvern, opphavsrett, reklame-merking, og oppbevaring/arkiv?"
+          answer={fag.etikkLov}
+          setAnswer={(v) => setFag({ ...fag, etikkLov: v })}
+          ai={fag.ai_etikkLov}
+          setAi={(v) => setFag({ ...fag, ai_etikkLov: v })}
+        />
+
+        <QuestionWithAI
+          title="Universell utforming"
+          text="Hvordan sikrer du universell utforming i ferdig produkt (teksting, kontrast, lesbarhet, tempo)?"
+          answer={fag.universell}
+          setAnswer={(v) => setFag({ ...fag, universell: v })}
+          ai={fag.ai_universell}
+          setAi={(v) => setFag({ ...fag, ai_universell: v })}
+        />
+
+        <hr className="sep" />
+
+        <QuestionWithAI
+          title="Rolle i team / virksomhet"
+          text="Beskriv din rolle, samarbeid og kvalitetssikring i Trim AS (kommunikasjon, ansvar, endringer)."
+          answer={fag.teamRolle}
+          setAnswer={(v) => setFag({ ...fag, teamRolle: v })}
+          ai={fag.ai_teamRolle}
+          setAi={(v) => setFag({ ...fag, ai_teamRolle: v })}
+        />
+
+        <QuestionWithAI
+          title="Evaluering"
+          text="Hvordan evaluerer du resultat og læring? Hvilke data bruker du, og hva forbedrer du i runde 2?"
+          answer={fag.evaluering}
+          setAnswer={(v) => setFag({ ...fag, evaluering: v })}
+          ai={fag.ai_evaluering}
+          setAi={(v) => setFag({ ...fag, ai_evaluering: v })}
+        />
+
+        <QuestionWithAI
+          title="Samfunnsdebatt og demokrati"
+          text="Reflekter kort: Hvordan kan innholdsproduksjoner påvirke samfunnsdebatt og demokrati?"
+          answer={fag.samfunn}
+          setAnswer={(v) => setFag({ ...fag, samfunn: v })}
+          ai={fag.ai_samfunn}
+          setAi={(v) => setFag({ ...fag, ai_samfunn: v })}
+        />
+
+        <QuestionWithAI
+          title="Likeverdig og inkluderende yrkesfellesskap"
+          text="Gjør rede for krav/forventninger, og reflekter over plikter og rettigheter i lærebedrift."
+          answer={fag.yrkesfellesskap}
+          setAnswer={(v) => setFag({ ...fag, yrkesfellesskap: v })}
+          ai={fag.ai_yrkesfellesskap}
+          setAi={(v) => setFag({ ...fag, ai_yrkesfellesskap: v })}
+        />
+
+        <QuestionWithAI
+          title="Dokumentasjon"
+          text="Hvordan dokumenterer du prosess, filstruktur, kilder, versjoner og endelig leveranse til kunden?"
+          answer={fag.dokumentasjon}
+          setAnswer={(v) => setFag({ ...fag, dokumentasjon: v })}
+          ai={fag.ai_dokumentasjon}
+          setAi={(v) => setFag({ ...fag, ai_dokumentasjon: v })}
+        />
       </div>
 
       <div className="section">
@@ -490,7 +855,9 @@ function FagproveTab({ fag, setFag }: { fag: FagproveAnswers; setFag: (v: Fagpro
         <p>Bruk dette som kontroll før du leverer.</p>
         <ol>
           {kompetansemaal.map((m, i) => (
-            <li key={i} style={{ margin: "6px 0", color: "var(--muted)" }}>{m}</li>
+            <li key={i} style={{ margin: "6px 0", color: "var(--muted)" }}>
+              {m}
+            </li>
           ))}
         </ol>
       </div>
@@ -505,14 +872,15 @@ function KompetanseTab({ komp, setKomp }: { komp: KompetanseAnswers; setKomp: (v
         <h3>1. Kunde</h3>
         <div className="kv two">
           <Field label="Kundetype">
-            <select className="select" value={komp.kundeType} onChange={(e) => setKomp({ ...komp, kundeType: e.target.value as any })}>
-              <option value="cafe">Café</option>
-              <option value="hotell">Hotell</option>
-              <option value="museum">Museum</option>
-            </select>
+            <KundeSelect value={komp.kundeType} onChange={(v) => setKomp({ ...komp, kundeType: v })} />
           </Field>
           <Field label="Kundenavn (kan redigeres)">
-            <input className="input" value={komp.kundenavn} onChange={(e) => setKomp({ ...komp, kundenavn: e.target.value })} placeholder="Skriv kundenavn" />
+            <input
+              className="input"
+              value={komp.kundenavn}
+              onChange={(e) => setKomp({ ...komp, kundenavn: e.target.value })}
+              placeholder="Skriv kundenavn"
+            />
           </Field>
         </div>
       </div>
@@ -520,45 +888,85 @@ function KompetanseTab({ komp, setKomp }: { komp: KompetanseAnswers; setKomp: (v
       <div className="section">
         <h3>2. Kjerneelement (låste spørsmål)</h3>
 
-        <Question title="Design og kreativitet" text="Forklar kort hvordan du jobber fra idé til ferdig produkt (designvalg, komposisjon og brukeropplevelse).">
-          <textarea className="textarea" value={komp.design} onChange={(e) => setKomp({ ...komp, design: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Design og kreativitet"
+          text="Forklar kort hvordan du jobber fra idé til ferdig produkt (designvalg, komposisjon og brukeropplevelse)."
+          answer={komp.design}
+          setAnswer={(v) => setKomp({ ...komp, design: v })}
+          ai={komp.ai_design}
+          setAi={(v) => setKomp({ ...komp, ai_design: v })}
+        />
 
-        <Question title="Teknologi og produksjon" text="Forklar kort hvilke verktøy/utstyr du velger, og hvorfor (opptak, redigering, eksport/publisering).">
-          <textarea className="textarea" value={komp.teknologi} onChange={(e) => setKomp({ ...komp, teknologi: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Teknologi og produksjon"
+          text="Forklar kort hvilke verktøy/utstyr du velger, og hvorfor (opptak, redigering, eksport/publisering)."
+          answer={komp.teknologi}
+          setAnswer={(v) => setKomp({ ...komp, teknologi: v })}
+          ai={komp.ai_teknologi}
+          setAi={(v) => setKomp({ ...komp, ai_teknologi: v })}
+        />
 
-        <Question title="Kommunikasjon og historiefortelling" text="Forklar kort hvordan du bygger budskap og historie tilpasset kanal, sjanger og målgruppe.">
-          <textarea className="textarea" value={komp.fortelling} onChange={(e) => setKomp({ ...komp, fortelling: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Kommunikasjon og historiefortelling"
+          text="Forklar kort hvordan du bygger budskap og historie tilpasset kanal, sjanger og målgruppe."
+          answer={komp.fortelling}
+          setAnswer={(v) => setKomp({ ...komp, fortelling: v })}
+          ai={komp.ai_fortelling}
+          setAi={(v) => setKomp({ ...komp, ai_fortelling: v })}
+        />
       </div>
 
       <div className="section">
         <h3>3. Smarte valg</h3>
 
-        <Question title="Formatvalg" text="Velg ett format (begrunn): (A) 60–90 sek film (B) 20 sek Reels (C) 8 sek bumper.">
-          <textarea className="textarea" value={komp.formatvalg} onChange={(e) => setKomp({ ...komp, formatvalg: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Formatvalg"
+          text="Velg ett format (begrunn): (A) 60–90 sek film (B) 20 sek Reels (C) 8 sek bumper."
+          answer={komp.formatvalg}
+          setAnswer={(v) => setKomp({ ...komp, formatvalg: v })}
+          ai={komp.ai_formatvalg}
+          setAi={(v) => setKomp({ ...komp, ai_formatvalg: v })}
+        />
 
-        <Question title="Lysvalg" text="Velg lysløsning (begrunn): (A) naturlys + reflektor (B) 1 LED key + fill (C) 3-punkt.">
-          <textarea className="textarea" value={komp.lysvalg} onChange={(e) => setKomp({ ...komp, lysvalg: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Lysvalg"
+          text="Velg lysløsning (begrunn): (A) naturlys + reflektor (B) 1 LED key + fill (C) 3-punkt."
+          answer={komp.lysvalg}
+          setAnswer={(v) => setKomp({ ...komp, lysvalg: v })}
+          ai={komp.ai_lysvalg}
+          setAi={(v) => setKomp({ ...komp, ai_lysvalg: v })}
+        />
 
-        <Question title="Enkel plan" text="Skriv en enkel plan i punktform fra idé → opptak → post → publisering.">
-          <textarea className="textarea" value={komp.enkelPlan} onChange={(e) => setKomp({ ...komp, enkelPlan: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Enkel plan"
+          text="Skriv en enkel plan i punktform fra idé → opptak → post → publisering."
+          answer={komp.enkelPlan}
+          setAnswer={(v) => setKomp({ ...komp, enkelPlan: v })}
+          ai={komp.ai_enkelPlan}
+          setAi={(v) => setKomp({ ...komp, ai_enkelPlan: v })}
+        />
       </div>
 
       <div className="section">
         <h3>4. Publisering og etikk</h3>
 
-        <Question title="Publisering/KPI/algoritme" text="Nevn 3 KPI-er du vil måle, og hvordan du tilpasser innhold til algoritmene.">
-          <textarea className="textarea" value={komp.enkelPublisering} onChange={(e) => setKomp({ ...komp, enkelPublisering: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Publisering/KPI/algoritme"
+          text="Nevn 3 KPI-er du vil måle, og hvordan du tilpasser innhold til algoritmene."
+          answer={komp.enkelPublisering}
+          setAnswer={(v) => setKomp({ ...komp, enkelPublisering: v })}
+          ai={komp.ai_enkelPublisering}
+          setAi={(v) => setKomp({ ...komp, ai_enkelPublisering: v })}
+        />
 
-        <Question title="Etikk/lov/opphavsrett/personvern" text="Nevn 3 konkrete tiltak du gjør for å sikre etikk og regelverk.">
-          <textarea className="textarea" value={komp.enkelEtikk} onChange={(e) => setKomp({ ...komp, enkelEtikk: e.target.value })} placeholder="Skriv svaret ditt her…" />
-        </Question>
+        <QuestionWithAI
+          title="Etikk/lov/opphavsrett/personvern"
+          text="Nevn 3 konkrete tiltak du gjør for å sikre etikk og regelverk."
+          answer={komp.enkelEtikk}
+          setAnswer={(v) => setKomp({ ...komp, enkelEtikk: v })}
+          ai={komp.ai_enkelEtikk}
+          setAi={(v) => setKomp({ ...komp, ai_enkelEtikk: v })}
+        />
       </div>
 
       <div className="section">
@@ -587,7 +995,10 @@ function InfoTab() {
           ))}
         </ol>
         <div className="small" style={{ marginTop: 10 }}>
-          Lenke: <a href={udirLinks.kjerneelementer} target="_blank">UDIR – kjerneelementer</a>
+          Lenke:{" "}
+          <a href={udirLinks.kjerneelementer} target="_blank">
+            UDIR – kjerneelementer
+          </a>
         </div>
       </div>
 
@@ -595,11 +1006,16 @@ function InfoTab() {
         <h3>Kompetansemål (bokmål-oversatt)</h3>
         <ol>
           {kompetansemaal.map((m, i) => (
-            <li key={i} style={{ margin: "8px 0" }}>{m}</li>
+            <li key={i} style={{ margin: "8px 0" }}>
+              {m}
+            </li>
           ))}
         </ol>
         <div className="small" style={{ marginTop: 10 }}>
-          Lenke: <a href={udirLinks.kompetansemaal} target="_blank">UDIR – kompetansemål</a>
+          Lenke:{" "}
+          <a href={udirLinks.kompetansemaal} target="_blank">
+            UDIR – kompetansemål
+          </a>
         </div>
       </div>
 
@@ -607,16 +1023,36 @@ function InfoTab() {
         <h3>Vurderingskriterier (praktisk rubrikk)</h3>
         <p>Denne rubrikken er laget for prøven og kan justeres lokalt i VS Code.</p>
         <ol>
-          <li><b>Oppdragsforståelse:</b> Behov, mål og budskap er tydelig og relevant.</li>
-          <li><b>Brukerinnsikt:</b> Metode er egnet, og innsikt omsettes til konkrete grep.</li>
-          <li><b>Kreativt konsept:</b> Idé, sjanger/format og pitch henger sammen og er målrettet.</li>
-          <li><b>Plan og gjennomføring:</b> Produksjonsplan og ressursbruk er realistisk.</li>
-          <li><b>Teknisk kvalitet:</b> Lyd/bilde/lys/komposisjon og etterarbeid er kontrollert.</li>
-          <li><b>Publisering:</b> Strategi, KPI-er og forståelse av algoritmer er tydelig.</li>
-          <li><b>Etikk og lov:</b> Opphavsrett, samtykke/personvern, merking og oppbevaring ivaretas.</li>
-          <li><b>Universell utforming:</b> Teksting, lesbarhet og tilgjengelighet er ivaretatt.</li>
-          <li><b>Samarbeid/rolle:</b> Profesjonell kommunikasjon og ansvar i team.</li>
-          <li><b>Dokumentasjon og refleksjon:</b> Sporbar prosess og relevant evaluering.</li>
+          <li>
+            <b>Oppdragsforståelse:</b> Behov, mål og budskap er tydelig og relevant.
+          </li>
+          <li>
+            <b>Brukerinnsikt:</b> Metode er egnet, og innsikt omsettes til konkrete grep.
+          </li>
+          <li>
+            <b>Kreativt konsept:</b> Idé, sjanger/format og pitch henger sammen og er målrettet.
+          </li>
+          <li>
+            <b>Plan og gjennomføring:</b> Produksjonsplan og ressursbruk er realistisk.
+          </li>
+          <li>
+            <b>Teknisk kvalitet:</b> Lyd/bilde/lys/komposisjon og etterarbeid er kontrollert.
+          </li>
+          <li>
+            <b>Publisering:</b> Strategi, KPI-er og forståelse av algoritmer er tydelig.
+          </li>
+          <li>
+            <b>Etikk og lov:</b> Opphavsrett, samtykke/personvern, merking og oppbevaring ivaretas.
+          </li>
+          <li>
+            <b>Universell utforming:</b> Teksting, lesbarhet og tilgjengelighet er ivaretatt.
+          </li>
+          <li>
+            <b>Samarbeid/rolle:</b> Profesjonell kommunikasjon og ansvar i team.
+          </li>
+          <li>
+            <b>Dokumentasjon og refleksjon:</b> Sporbar prosess og relevant evaluering.
+          </li>
         </ol>
       </div>
 
@@ -639,47 +1075,69 @@ function Box({ q, a }: { q: string; a: string }) {
   );
 }
 
+function BoxWithAI({ q, a, ai }: { q: string; a: string; ai: string }) {
+  return (
+    <div className="box">
+      <div className="q">{q}</div>
+      <div className="answer">{(a || "").trim() || "—"}</div>
+      <div style={{ marginTop: 8 }}>
+        <div className="q">AI brukt</div>
+        <div className="answer">{(ai || "").trim() || "—"}</div>
+      </div>
+    </div>
+  );
+}
+
 function FagprovePrint({ fag }: { fag: FagproveAnswers }) {
   return (
     <>
       <p className="meta">
-        Kunde: <b>{fag.kundenavn || "—"}</b> ({kundeLabel(fag.kundeType)}) • Profil: <b>lys/seriøs corporate</b>
+        Kunde: <b>{fag.kundenavn || "—"}</b> ({kundeLabel(fag.kundeType)}) • Profil:{" "}
+        <b>lys/seriøs corporate</b>
       </p>
 
       <h2>Fagprøve – svar</h2>
-      <Box q="Bakgrunn / problem" a={fag.bakgrunn} />
-      <Box q="Mål og ønsket effekt" a={fag.mal} />
-      <Box q="Målgruppe" a={fag.malgruppe} />
-      <Box q="Brukerinnsikt" a={fag.innsikt} />
-      <Box q="Budskap" a={fag.budskap} />
-      <Box q="Tone / profil" a={fag.tone} />
-      <Box q="Idéutvikling" a={fag.ideutvikling} />
-      <Box q="Pitch" a={fag.pitch} />
+      <BoxWithAI q="Bakgrunn / problem" a={fag.bakgrunn} ai={fag.ai_bakgrunn} />
+      <BoxWithAI q="Mål og ønsket effekt" a={fag.mal} ai={fag.ai_mal} />
+      <BoxWithAI q="Målgruppe" a={fag.malgruppe} ai={fag.ai_malgruppe} />
+      <BoxWithAI q="Brukerinnsikt" a={fag.innsikt} ai={fag.ai_innsikt} />
+      <BoxWithAI q="Budskap" a={fag.budskap} ai={fag.ai_budskap} />
+      <BoxWithAI q="Tone / profil" a={fag.tone} ai={fag.ai_tone} />
+      <BoxWithAI q="Idéutvikling" a={fag.ideutvikling} ai={fag.ai_ideutvikling} />
+      <BoxWithAI q="Pitch" a={fag.pitch} ai={fag.ai_pitch} />
 
-      <Box q="Kanalvalg" a={fag.kanalvalg} />
-      <Box q="Leveranse 1: Hovedproduksjon" a={fag.leveranseHoved} />
-      <Box q="Leveranse 2: Plattformversjon 1" a={fag.leveransePlattform1} />
-      <Box q="Leveranse 3: Plattformversjon 2" a={fag.leveransePlattform2} />
+      <BoxWithAI q="Kanalvalg" a={fag.kanalvalg} ai={fag.ai_kanalvalg} />
+      <BoxWithAI q="Leveranse 1: Hovedproduksjon" a={fag.leveranseHoved} ai={fag.ai_leveranseHoved} />
+      <BoxWithAI
+        q="Leveranse 2: Plattformversjon 1"
+        a={fag.leveransePlattform1}
+        ai={fag.ai_leveransePlattform1}
+      />
+      <BoxWithAI
+        q="Leveranse 3: Plattformversjon 2"
+        a={fag.leveransePlattform2}
+        ai={fag.ai_leveransePlattform2}
+      />
 
-      <Box q="Produksjonsplan" a={fag.produksjonsplan} />
-      <Box q="Budsjett / ressursbehov" a={fag.budsjett} />
-      <Box q="Opptak" a={fag.opptak} />
-      <Box q="Utstyr og programvare" a={fag.utstyr} />
+      <BoxWithAI q="Produksjonsplan" a={fag.produksjonsplan} ai={fag.ai_produksjonsplan} />
+      <BoxWithAI q="Budsjett / ressursbehov" a={fag.budsjett} ai={fag.ai_budsjett} />
+      <BoxWithAI q="Opptak" a={fag.opptak} ai={fag.ai_opptak} />
+      <BoxWithAI q="Utstyr og programvare" a={fag.utstyr} ai={fag.ai_utstyr} />
 
-      <Box q="Lys, komposisjon og visuelle virkemidler" a={fag.lysKomposisjon} />
-      <Box q="Etterarbeid og eksport" a={fag.etterarbeidEksport} />
+      <BoxWithAI q="Lys, komposisjon og visuelle virkemidler" a={fag.lysKomposisjon} ai={fag.ai_lysKomposisjon} />
+      <BoxWithAI q="Etterarbeid og eksport" a={fag.etterarbeidEksport} ai={fag.ai_etterarbeidEksport} />
 
-      <Box q="Algoritmer og personalisering" a={fag.algoritmer} />
-      <Box q="Publiseringsstrategi" a={fag.publiseringsstrategi} />
+      <BoxWithAI q="Algoritmer og personalisering" a={fag.algoritmer} ai={fag.ai_algoritmer} />
+      <BoxWithAI q="Publiseringsstrategi" a={fag.publiseringsstrategi} ai={fag.ai_publiseringsstrategi} />
 
-      <Box q="Etikk, lovverk og opphavsrett" a={fag.etikkLov} />
-      <Box q="Universell utforming" a={fag.universell} />
+      <BoxWithAI q="Etikk, lovverk og opphavsrett" a={fag.etikkLov} ai={fag.ai_etikkLov} />
+      <BoxWithAI q="Universell utforming" a={fag.universell} ai={fag.ai_universell} />
 
-      <Box q="Rolle i team / virksomhet" a={fag.teamRolle} />
-      <Box q="Evaluering" a={fag.evaluering} />
-      <Box q="Samfunnsdebatt og demokrati" a={fag.samfunn} />
-      <Box q="Likeverdig og inkluderende yrkesfellesskap" a={fag.yrkesfellesskap} />
-      <Box q="Dokumentasjon" a={fag.dokumentasjon} />
+      <BoxWithAI q="Rolle i team / virksomhet" a={fag.teamRolle} ai={fag.ai_teamRolle} />
+      <BoxWithAI q="Evaluering" a={fag.evaluering} ai={fag.ai_evaluering} />
+      <BoxWithAI q="Samfunnsdebatt og demokrati" a={fag.samfunn} ai={fag.ai_samfunn} />
+      <BoxWithAI q="Likeverdig og inkluderende yrkesfellesskap" a={fag.yrkesfellesskap} ai={fag.ai_yrkesfellesskap} />
+      <BoxWithAI q="Dokumentasjon" a={fag.dokumentasjon} ai={fag.ai_dokumentasjon} />
 
       <h2>Kompetansemål (sjekkliste)</h2>
       <ol>
@@ -695,18 +1153,19 @@ function KompetansePrint({ komp }: { komp: KompetanseAnswers }) {
   return (
     <>
       <p className="meta">
-        Kunde: <b>{komp.kundenavn || "—"}</b> ({kundeLabel(komp.kundeType)}) • Fokus: <b>kjerneelementer</b>
+        Kunde: <b>{komp.kundenavn || "—"}</b> ({kundeLabel(komp.kundeType)}) • Fokus:{" "}
+        <b>kjerneelementer</b>
       </p>
 
       <h2>Kompetansebevis – svar</h2>
-      <Box q="Design og kreativitet" a={komp.design} />
-      <Box q="Teknologi og produksjon" a={komp.teknologi} />
-      <Box q="Kommunikasjon og historiefortelling" a={komp.fortelling} />
-      <Box q="Formatvalg" a={komp.formatvalg} />
-      <Box q="Lysvalg" a={komp.lysvalg} />
-      <Box q="Enkel plan" a={komp.enkelPlan} />
-      <Box q="Publisering/KPI/algoritme" a={komp.enkelPublisering} />
-      <Box q="Etikk/lov/opphavsrett/personvern" a={komp.enkelEtikk} />
+      <BoxWithAI q="Design og kreativitet" a={komp.design} ai={komp.ai_design} />
+      <BoxWithAI q="Teknologi og produksjon" a={komp.teknologi} ai={komp.ai_teknologi} />
+      <BoxWithAI q="Kommunikasjon og historiefortelling" a={komp.fortelling} ai={komp.ai_fortelling} />
+      <BoxWithAI q="Formatvalg" a={komp.formatvalg} ai={komp.ai_formatvalg} />
+      <BoxWithAI q="Lysvalg" a={komp.lysvalg} ai={komp.ai_lysvalg} />
+      <BoxWithAI q="Enkel plan" a={komp.enkelPlan} ai={komp.ai_enkelPlan} />
+      <BoxWithAI q="Publisering/KPI/algoritme" a={komp.enkelPublisering} ai={komp.ai_enkelPublisering} />
+      <BoxWithAI q="Etikk/lov/opphavsrett/personvern" a={komp.enkelEtikk} ai={komp.ai_enkelEtikk} />
 
       <h2>Kjerneelementer (referanse)</h2>
       <ol>
