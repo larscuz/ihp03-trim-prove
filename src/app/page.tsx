@@ -220,11 +220,13 @@ export default function Page() {
     <>
       <div className="header">
         <div className="hgroup">
-          <h1>IHP03-01 prøve – Trim AS</h1>
-          <p>
-            Kommersiell case (café/hotell/museum) i lys, seriøs corporate profil.
-            Spørsmålene er låst. Kandidaten fyller kun inn svar og kan laste ned PDF.
-          </p>
+          <h1>Prøve i innholdsproduksjon (IHP03-01)</h1>
+<p>
+  Fagprøve eller kompetansebevis – kreativ brief for kommersiell kunde i sosiale medier.
+  Du arbeider i reklamebyrået <b>Trim AS</b> og skal planlegge, beskrive og dokumentere
+  en innholdsproduksjon for en kunde (café, hotell eller museum).
+</p>
+
         </div>
         <span className="badge">v0.2 • bokmål</span>
       </div>
